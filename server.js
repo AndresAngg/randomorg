@@ -1,7 +1,8 @@
 const RandomOrg = require('random-org');
+let table = require("table");
 var data, sum = 0
-var random = new RandomOrg({ apiKey: 'eceb1b4b-0d71-4597-acd9-47a9f89a44bb' });
-var Z = 0.67448975, sumaFr = 0, raz = Math.sqrt(10000)
+var random = new RandomOrg({ apiKey: 'd9230aa5-0aea-4cf3-b479-ac7c222ff0ed' });
+var sumaFr = 0, raz = Math.sqrt(10000), DISTRINORMALINV = 0.509972518, mErr = 0.05
 const K = 1.33 * Math.log(10000), Kre = Math.round(K) + 1, amplitud = Math.round(100 / Kre)
 //752220f3-fd99-4ee4-97a3-b4c782fff258
 //a2fe8d15-b03b-43f1-95b9-b93473946204
@@ -11,7 +12,7 @@ const K = 1.33 * Math.log(10000), Kre = Math.round(K) + 1, amplitud = Math.round
 
 const fo = (LS, LI) => {
   var cont = 0
-  for (var i = 0; i < data.length; i++) {         
+  for (var i = 0; i < data.length; i++) {
     if (data[i] >= LI && data[i] < LS) {
       cont += 1
     }
@@ -20,6 +21,11 @@ const fo = (LS, LI) => {
 }
 
 const frecuen = () => {
+  config = {
+  
+    // Predefined styles of table
+    border: table.getBorderCharacters("ramac"),
+  }
   var i = 1
   var lI = 0, lS = amplitud, fE
   var message = `Li       Ls            Fe            Fo      err\n`
@@ -27,10 +33,10 @@ const frecuen = () => {
     lI = i > 1 ? lS : 0
     lS = i == 13 ? (100 / Kre) * i : amplitud * i
     fE = (10000 / Kre).toFixed(4)
-    error = Math.pow(((fE-fo(lS, lI))/fE),2)
+    var error = Math.pow(((fE-fo(lS, lI))/fE),2)
     
 
-    message += `${lI}     ${lS}      ${fE}      ${fo(lS, lI)}     ${error}\n`
+    message += `${lI}     ${lS}      ${fE}      ${fo(lS, lI)}     ${error.toFixed(6)}\n`
     i++
   }
   return message
@@ -45,10 +51,11 @@ data = random.generateIntegers({ min: 0, max: 100, n: 10000 })
     }
     var prom = sum / data.length
     var cal = (0.5-prom)*(Math.sqrt(10000)/Math.sqrt(1/12))
+    var z = (Math.abs(DISTRINORMALINV) <= 1) ? "Aceptada": "Rechazada"
     console.log(frecuen())
     console.log("K aprox: ", Kre)
     console.log("Amplitud: ", amplitud)
-    console.log("El promedio es ", prom, "\nLamnda ", cal, "\nZ ", Z)
+    console.log("El promedio es ", prom, "\nLamnda ", cal, "\nmanejo error(%): 5% -> ", mErr,"\nZm ", z)
   }).catch((error)=>{
     console.error("Error, cambiar la apiKey -->", error.message)
   })
