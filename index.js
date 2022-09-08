@@ -1,6 +1,6 @@
 const RandomOrg = require('random-org');
 var data, sum = 0
-var random = new RandomOrg({ apiKey: '0e1fa5c6-89de-4ad7-a85a-c59e90915920' });
+var random = new RandomOrg({ apiKey: '30633350-333d-4f5c-a8cc-8759b8d0c84a' });
 var distriNormalInv = 0.509972518, mErr = 0.05
 const K = 1.33 * Math.log(10000), Kre = Math.round(K) + 1, amplitud = Math.round(100 / Kre)
 //752220f3-fd99-4ee4-97a3-b4c782fff258
@@ -47,6 +47,6 @@ data = random.generateIntegers({ min: 0, max: 100, n: 10000 })
     console.log(frecuen())
     console.log("K aprox: ", Kre, "\nAmplitud: ", amplitud, "\nPromedio: ", prom, "\nLambda: ", cal, "\nmanejo error(%): 5% -> ", mErr,"\nZ: ", z)
   }).catch((error)=>{
-    console.error("Cambiar la apiKey -->", error.message)
+    console.error("Cambiar la apiKey, para 10k de valores solo se pueden 3 peticiones, eso por cada apiKey -->", error.message)
   })
 
